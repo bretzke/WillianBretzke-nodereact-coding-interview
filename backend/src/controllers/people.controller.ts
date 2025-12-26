@@ -4,6 +4,10 @@ import {
     HttpCode,
     NotFoundError,
     Param,
+    Post,
+    Body,
+    BodyParam,
+    QueryParam,
 } from 'routing-controllers';
 import { PeopleProcessing } from '../services/people_processing.service';
 
@@ -12,9 +16,9 @@ const peopleProcessing = new PeopleProcessing();
 @JsonController('/people', { transformResponse: false })
 export default class PeopleController {
     @HttpCode(200)
-    @Get('/all')
-    getAllPeople() {
-        const people = peopleProcessing.getAll();
+    @Get('/')
+    getAllPeople(@QueryParam('search') search: string, @QueryParam('page') page: number, @QueryParam('limit') limit: number) {
+        const people = peopleProcessing.searchPeople(search, page, limit);
 
         if (!people) {
             throw new NotFoundError('No people found');
@@ -38,4 +42,18 @@ export default class PeopleController {
             data: person,
         };
     }
+
+    // @HttpCode(200)
+    // @Post('/search')
+    // searchPeople(@BodyParam('search') search: string) {
+    //   const searchedPeople = peopleProcessing.searchPeople(search)
+
+    //   if (!searchedPeople) {
+    //     throw new NotFoundError('No people found by this search.')
+    //   }
+
+    //   return {
+    //     data: searchedPeople
+    //   }
+    // }
 }

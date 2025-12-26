@@ -8,7 +8,13 @@ export class BackendClient {
     this.baseUrl = baseUrl;
   }
 
-  async getAllUsers(): Promise<{ data: IUserProps[] }> {
-    return (await axios.get(`${this.baseUrl}/people`, {})).data;
+  async getAllUsers(search?: string): Promise<{ data: IUserProps[] }> {
+    return (await axios.get(`${this.baseUrl}/people?search=${search ?? ""}`, {})).data;
   }
+
+  // async searchUser(search: string): Promise<{ data: IUserProps[]}> {
+  //   return (await axios.post(`${this.baseUrl}/people/search`, {
+  //     search
+  //   })).data
+  // }
 }
